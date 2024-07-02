@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Source.Modules.EffectsSystem;
 using UnityEngine;
 
 namespace Modules.BulletSystem
@@ -8,6 +9,7 @@ namespace Modules.BulletSystem
     {
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private float _lifetime;
+        [SerializeField] private BulletParticleController _particleController;
         [field: SerializeField] public Collider Collider { get; private set; }
 
         private WaitForSeconds _waitlifetime;
@@ -20,7 +22,9 @@ namespace Modules.BulletSystem
         {
             if (_coroutine != null)
                 StopCoroutine(_coroutine);
-
+            
+            _particleController.DeactivateParticle();
+            
             LifespanEnded?.Invoke(this);
         }
 
@@ -35,6 +39,7 @@ namespace Modules.BulletSystem
         public void SetPosition(Vector3 position)
         {
             _rigidbody.position = position;
+            _particleController.ActivateParticle();
             LifespanStarted?.Invoke(this);
         }
 
